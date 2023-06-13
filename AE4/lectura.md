@@ -94,7 +94,7 @@ TRUNCATE TABLE alumnos;
 
     El uso de transacciones es fundamental cuando se requiere mantener la consistencia y la integridad de los datos en aplicaciones y sistemas que realizan múltiples operaciones de base de datos de forma simultánea.
 
-    
+
     Comandos:
 
     - **START TRANSACTION o BEGIN:** Inicia una nueva transacción, marcando el comienzo de un bloque de transacción.
@@ -159,6 +159,9 @@ TRUNCATE TABLE alumnos;
         -- Operaciones dentro de la transacción
     COMMIT;
     ```
+
+
+    
 
 
 

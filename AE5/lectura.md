@@ -102,15 +102,3 @@ Tabla: Pedido_Producto (Tabla de relación para la relación N:M entre Pedido y 
 - cantidad
 
 
-## DDL
-
-DDL significa "Data Definition Language" (Lenguaje de Definición de Datos) y es un conjunto de comandos utilizados para definir y gestionar la estructura y características de una base de datos. DDL se utiliza para crear, modificar y eliminar objetos de base de datos como tablas, índices, vistas, restricciones, entre otros. Algunos ejemplos de comandos DDL en MySQL son:
-
-- CREATE: Se utiliza para crear objetos de base de datos, como tablas o vistas.
-- ALTER: Permite modificar la estructura de un objeto existente, como agregar o eliminar columnas de una tabla.
-- DROP: Se utiliza para eliminar objetos de base de datos, como tablas o vistas.
-- TRUNCATE: Elimina todos los datos de una tabla, pero mantiene su estructura.
-- CREATE INDEX: Crea un índice en una o varias columnas de una tabla para mejorar la eficiencia de las consultas.
-- CREATE VIEW: Crea una vista, que es una representación virtual de una o varias tablas.
-
-## DML
