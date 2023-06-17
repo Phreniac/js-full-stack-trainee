@@ -1,0 +1,15 @@
+{
+  "name": "test-server",
+  "version": "1.0.0",
+  "description": "servidor de prueba para ver su funcionamiento",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "author": "Phreniac",
+  "license": "ISC",
+  "dependencies": {
+    "nodemon": "^2.0.22"
+  }
+}
