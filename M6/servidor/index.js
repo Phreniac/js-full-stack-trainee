@@ -4,12 +4,6 @@ const fs = require('fs');
 
 //llamado a una api externa con el modulo https
 const pokeDex = async (nombre)=>{
-  //usando https.request
-  // const options = {
-  //   hostname:'pokeapi.co',
-  //   path:`/api/v2/stat/${nombre}`,
-  //   method: 'GET'
-  // }
   //usando .get
   const url = `https://pokeapi.co/api/v2/stat/${nombre}`;
   console.log(url);
@@ -20,11 +14,31 @@ const pokeDex = async (nombre)=>{
       data += chunk;
     });
     res.on("end", ()=>{
-      console.log('Data:', JSON.parse(data));
+     // console.log('Data:', JSON.parse(data));
     })
   }).on("error", (err)=>{
     console.log('error api:', err)
   });
+}
+
+const pokeDexRequest = async (nombre)=>{
+  //usando https.request
+  const options = {
+    hostname:'pokeapi.co',
+    path:`/api/v2/stat/${nombre}`,
+    method: 'GET'
+  }
+  const request =  https.request(options, res =>{
+    let data = '';
+    //se obtiene la data desde la api y se asigna
+    res.on("data",(chunk) =>{
+      data += chunk;
+    });
+    res.on("end", ()=>{
+      console.log('Data:', JSON.parse(data));
+    })
+  });
+  request.end();
 }
 
 const server = http.createServer((req, res) => {
@@ -53,6 +67,7 @@ const server = http.createServer((req, res) => {
       res.write('consulta pokemon'); 
       res.end(); // Finaliza la respuesta
       pokeDex(id_pokemon);
+      pokeDexRequest(id_pokemon);
     }
     else {
       res.write('Pagina no encontrada'); // Envía una respuesta al cliente
