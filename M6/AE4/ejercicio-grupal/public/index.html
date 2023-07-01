@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="
+        https://cdn.jsdelivr.net/npm/axios@1.4.0/dist/axios.min.js
+        "></script>
+    <title>Sitio estatico</title>
+</head>
+<body>
+    <main>
+        <section>
+            <form action="/upload-img" method="POST">
+                <label for="url_img">Ingresa la url de la imagen:</label>
+                <input id="url_img" type="text">
+                <button type="submit">Subir Imagen</button>
+            </form>
+        </section>
+    </main>
+    <script>
+        // const sendImageUrl = async ()=>{
+        //     const url_upload = 'http://localhost:3200/upload-img'
+        //     const url_img_val = document.getElementById('url_img').value;
+        //     if(url_img_val != ""){
+        //         const data = {
+        //             url_img: url_img_val
+        //         }
+        //        await axios.post(url_upload, data).then(res=>{
+        //         console.log('respuesta servidor', res);
+        //        })
+        //     }
+           
+        // }
+    </script>
+</body>
+</html>
