@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "PS4",
+    "company": "PlayStation",
+    "release_date": "2012-02-07"
+  },
+  {
+    "id": 2,
+    "name": "PS5",
+    "company": "PlayStation",
+    "release_date": "2022-03-01"
+  },
+  {
+    "id": 3,
+    "name": "PS3",
+    "company": "PlayStation",
+    "release_date": "2004-05-23"
+  }
+]

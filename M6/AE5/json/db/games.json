@@ -1,0 +1,88 @@
+[
+  {
+    "id": 1,
+    "title": "Final Destiny 7",
+    "platform": [
+      null,
+      null
+    ],
+    "genre": "Action",
+    "developer_company": "Bethesda",
+    "release_date": "2022-07-20"
+  },
+  {
+    "id": 2,
+    "title": "Darkest field",
+    "platform": [
+      null
+    ],
+    "genre": "RPG",
+    "developer_company": "Square Enix",
+    "release_date": "2023-02-20"
+  },
+  {
+    "id": 3,
+    "title": "Darkest field",
+    "platform": [
+      null
+    ],
+    "genre": "RPG",
+    "developer_company": "Square Enix",
+    "release_date": "2023-02-20"
+  },
+  {
+    "id": 4,
+    "title": "Darkest field",
+    "platform": [
+      null
+    ],
+    "genre": "RPG",
+    "developer_company": "Square Enix",
+    "release_date": "2023-02-20"
+  },
+  {
+    "id": 5,
+    "title": "Darkest field",
+    "platform": [
+      null
+    ],
+    "genre": "RPG",
+    "developer_company": "Square Enix",
+    "release_date": "2023-02-20"
+  },
+  {
+    "id": 6,
+    "title": "Darkest field",
+    "platform": [
+      null
+    ],
+    "genre": "RPG",
+    "developer_company": "Square Enix",
+    "release_date": "2023-02-20"
+  },
+  {
+    "id": 7,
+    "title": "Darkest field",
+    "platform": [
+      null
+    ],
+    "genre": "RPG",
+    "developer_company": "Square Enix",
+    "release_date": "2023-02-20"
+  },
+  {
+    "id": 8,
+    "title": "Darkest field",
+    "platform": [
+      {
+        "id": 1,
+        "name": "PS4",
+        "company": "PlayStation",
+        "release_date": "2012-02-07"
+      }
+    ],
+    "genre": "RPG",
+    "developer_company": "Square Enix",
+    "release_date": "2023-02-20"
+  }
+]
