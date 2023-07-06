@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="
+https://cdn.jsdelivr.net/npm/axios@1.4.0/dist/axios.min.js
+"></script>
+</head>
+<body>
+    <main>
+        <section id="mensaje">
+        </section>
+    </main>
+    <script>
+        console.log('Ejecucion de script axios');
+        const ejecutarAxios = async() =>{
+            const section = document.getElementById('mensaje');
+            const url = 'http://localhost:3200/suma/10/a';
+            await axios.get(url).then(res=>{
+                console.log('respuesta axios', res.data);
+                const data = res.data;
+                if(data.err != null){
+                    section.innerHTML = '<div style="width:200px;height:60px;color:white;background:red">Ocurrió un error al ejecutar la funcion axios!</div>'
+                }else{
+                    section.innerHTML = `<div style="width:200px;height:60px;color:white;background:green">Se ejecuto la funcion axios correctamente! la suma de los numeros es: ${data.data} </div>`
+                }
+            })
+            .catch(err=>{
+                console.log(err);
+                section.innerHTML = '<div style="width:200px;height:60px;color:white;background:red">Ocurrió un error al ejecutar la funcion axios!</div>'
+            }).finally(
+                console.log('Finaliza funcion axios')
+            )
+        }                                                                                                                              
+        ejecutarAxios();
+    </script>
+</body>
+</html>
