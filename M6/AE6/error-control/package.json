@@ -1,0 +1,21 @@
+{
+  "name": "ae6",
+  "version": "1.0.0",
+  "description": "El control de errores es un aspecto esencial en la construcción de aplicaciones Node.js robustas y confiables. Un control adecuado de errores te ayuda a identificar y manejar los errores que pueden ocurrir durante la ejecución de tu código, asegurando que tu aplicación se comporte de manera adecuada y proporcione comentarios significativos a los usuarios. Aquí tienes un resumen de los conceptos y técnicas de control de errores en Node.js:",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server.js",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22"
+  },
+  "devDependencies": {}
+}

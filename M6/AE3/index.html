@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    <main>
+        <div>Hola Mundo</div>
+        <div id="lista_usuarios">
+        </div>
+    </main>
+    <script>
+        const generarTablaUsuarios = (lista_usuario)=>{
+            let lista_usuario_html = document.getElementById('lista_usuarios');
+            let html_content = `
+            <ul>
+            `;
+            console.log('lista_usuario',lista_usuario);
+            lista_usuario.forEach(usuario => {
+                html_content += `<li>${usuario.nombre}</li>`
+            });
+            html_content += '</ul>';
+            lista_usuario_html.innerHTML = html_content;
+
+        }
+        const getAllUsers = async ()=>{
+            let lista_usuario = [];
+            const url = 'http://localhost:3200/get-all-user/';
+            await axios.get(url).then(res=>{
+                console.log('respues desde el servidor:', res);
+                if(res.data.error == null){
+                    lista_usuario = res.data.datos;
+                    generarTablaUsuarios(lista_usuario);
+                }
+            }).catch(err =>{
+                console.log('error get all user: ', err);
+            })
+        }
+        getAllUsers();
+    </script>
+</body>
+</html>

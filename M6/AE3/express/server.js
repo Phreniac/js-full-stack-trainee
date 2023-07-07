@@ -6,6 +6,7 @@ const cors = require('cors');
 const lista_usuario = [];
 let server_response = {};
 
+//middlewares
 app.use(cors());
 app.use(bodyParser.json());
 
