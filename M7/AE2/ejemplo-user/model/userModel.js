@@ -30,6 +30,12 @@ class User {
     set idnumber(idnumber){
         this._idnumber = idnumber;
     }
+    get id(){
+        return this._id;
+    }
+    set id(id){
+        this._id = id;
+    }
 
     createUser = async (user) =>{ 
         let result = null;
@@ -56,6 +62,7 @@ class User {
                 if(rows.insertId > 0){
                     result = true;
                 }
+                connection.release();
             }
             
         } catch (error) {
@@ -65,6 +72,62 @@ class User {
             resolve(result);
         });
     }
+    getAllUsers = async () =>{
+        let result = null;
+        try {
+            const pool = await createPool();
+            const connection = await pool.getConnection();
+            const query = `SELECT * FROM user WHERE id_state = 1;`;
+            const [rows] = await connection.execute(query);
+            console.log('rows  select user: ', rows);
+            if(rows) result = rows;
+            connection.release();
+        } catch (error) {
+            console.log('select user error: ',error);
+        }
+        return new Promise((resolve, reject) =>{
+            resolve(result);
+        });
+    }
+    updateUser = async (user) =>{ 
+        let result = null;
+        try {
+            const pool = await createPool();
+            const connection = await pool.getConnection();
+            const query = `UPDATE user SET name = ?, lastname = ?, email = ?, idnumber = ? WHERE id_user = ? AND id_state = 1;`;
+            const [rows] = await connection.execute(query, [user.name,user.lastname,user.email, user.idnumber, user.id]);
+            console.log('rows  update user: ', rows);
+            if(rows.changedRows > 0){
+                result = true;
+            }
+            connection.release();
+        } catch (error) {
+            console.log('update user error: ',error);
+        }
+        return new Promise((resolve, reject) =>{
+            resolve(result);
+        });
+    }
+    deleteUser = async (user) =>{ 
+        let result = null;
+        try {
+            const pool = await createPool();
+            const connection = await pool.getConnection();
+            const query = `UPDATE user SET id_state = 3 WHERE id_user = ? AND id_state = 1;`;
+            const [rows] = await connection.execute(query, [user.id]);
+            console.log('rows  delete user: ', rows);
+            if(rows.changedRows > 0){
+                result = true;
+            }
+            connection.release();
+        } catch (error) {
+            console.log('update user error: ',error);
+        }
+        return new Promise((resolve, reject) =>{
+            resolve(result);
+        });
+    }
+
 }
 
 export {User};
