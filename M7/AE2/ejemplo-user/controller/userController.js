@@ -1,4 +1,5 @@
 import {User} from '../model/userModel.js';
+//funcion controlador para crear un usuario
 export const createUser = async (req, res) =>{
     let response = {
         msg:'User creation',
@@ -24,6 +25,7 @@ export const createUser = async (req, res) =>{
     }
     res.send(response);
 };
+//funcion controlador obtener todos los usuarios
 export const getAllUsers = async (req, res) =>{
     let response = {
         msg:'Get all Users',
@@ -49,6 +51,7 @@ export const getAllUsers = async (req, res) =>{
     }
     
 };
+//funcion controlador actualizar un usuario
 export const updateUser = async (req, res) =>{
     let response = {
         msg:'User update',
@@ -76,6 +79,7 @@ export const updateUser = async (req, res) =>{
     }
     res.send(response);
 };
+//funcion controlador para eliminar un usuario (borrado logico)
 export const deleteUser = async (req, res) =>{
     let response = {
         msg:'User delete',
@@ -90,6 +94,27 @@ export const deleteUser = async (req, res) =>{
         const model_result = await user.deleteUser(user);
         if(model_result != null) response.data = model_result;
         else response.error = 'Error trying to delete the user'
+    }else{
+        response.error = "Missing required parameters";
+    }
+    res.send(response);
+};
+//funcion controlador para que un usuario inicie sesión
+export const loginUser = async (req, res) =>{
+    let response = {
+        msg:'User login',
+        error: null,
+        data: null
+    };
+    const user_ = req.body.user;
+    const password = req.body.password;
+
+    if(user_ && password){
+        const user = new User();
+        const model_result = await user.loginUser(user_, password);
+        console.log('model result', model_result);
+        if(model_result != null) response.data = model_result;
+        else response.error = 'User or password incorrect.'
     }else{
         response.error = "Missing required parameters";
     }

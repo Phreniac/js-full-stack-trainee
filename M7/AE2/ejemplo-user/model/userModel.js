@@ -127,6 +127,30 @@ class User {
             resolve(result);
         });
     }
+    loginUser = async (user, password) =>{ 
+        let result = null;
+        try {
+            const pool = await createPool();
+            const connection = await pool.getConnection();
+            const query = `SELECT * FROM user
+            JOIN credential on credential.id_credential = user.id_credential
+            WHERE user.email = ?`;
+            const [rows] = await connection.execute(query, [user]);
+            if(rows.length > 0){
+                const saved_password = rows[0].password;
+                const bcrypt_result = await bcrypt.compare(password, saved_password);
+                if(bcrypt_result) result = true;
+                else result = false;
+
+            }
+            connection.release();
+        } catch (error) {
+            console.log('login user error: ',error);
+        }
+        return new Promise((resolve, reject) =>{
+            resolve(result);
+        });
+    }
 
 }
 
