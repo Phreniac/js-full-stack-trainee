@@ -134,14 +134,17 @@ class User {
             const connection = await pool.getConnection();
             const query = `SELECT * FROM user
             JOIN credential on credential.id_credential = user.id_credential
-            WHERE user.email = ?`;
+            WHERE user.email = ? AND user.id_state = 1;`;
             const [rows] = await connection.execute(query, [user]);
             if(rows.length > 0){
+                const id_user = rows[0].id_user;
                 const saved_password = rows[0].password;
                 const bcrypt_result = await bcrypt.compare(password, saved_password);
-                if(bcrypt_result) result = true;
-                else result = false;
-
+                if(bcrypt_result){
+                   result = await this.getUserById(id_user);
+                }else{
+                    result = false;
+                }
             }
             connection.release();
         } catch (error) {
@@ -151,7 +154,23 @@ class User {
             resolve(result);
         });
     }
-
+    getUserById = async(id_user)=>{
+        let result = null;
+        try {
+            const pool = await createPool();
+            const connection = await pool.getConnection();
+            const query = `SELECT * FROM user WHERE id_user = ? AND id_state = 1;`;
+            const [rows] = await connection.execute(query, [id_user]);
+            console.log('rows  select user: ', rows);
+            if(rows.length > 0) result = rows[0];
+            connection.release();
+        } catch (error) {
+            console.log('select user error: ',error);
+        }
+        return new Promise((resolve, reject) =>{
+            resolve(result);
+        });
+    }
 }
 
 export {User};
