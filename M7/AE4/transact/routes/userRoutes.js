@@ -2,7 +2,7 @@ import express from 'express';
 import {createUser, getAllUsers, updateUser, deleteUser, loginUser} from '../controller/userController.js';
 
 const router = express.Router();
-
+//dominio/user/crud
 router.post('/login', loginUser)
 router.post('/create',createUser);
 router.get('/getall', getAllUsers);

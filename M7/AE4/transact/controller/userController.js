@@ -106,6 +106,7 @@ export const loginUser = async (req, res) =>{
         error: null,
         data: null
     };
+    
     const user_ = req.body.user;
     const password = req.body.password;
 

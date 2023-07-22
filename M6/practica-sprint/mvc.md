@@ -3,7 +3,7 @@ El patrón de diseño Modelo-Vista-Controlador (MVC) es un enfoque arquitectóni
 
 - Modelo (Model): El modelo representa la capa de datos de la aplicación. Contiene la lógica de negocio, la gestión de datos y la interacción con la base de datos u otros servicios externos. En el contexto del ejercicio, el modelo se encargaría de manejar la lógica relacionada con los usuarios registrados, las puntuaciones y cualquier otra operación relacionada con los datos.
 
-- Vista (View): La vista es la capa de presentación de la aplicación. Es responsable de mostrar la información al usuario y recibir las interacciones del usuario. En el ejercicio, las vistas serían las páginas HTML generadas con la plantilla EJS, como la página de registro, la página de inicio de sesión, la página del quiz y la página de la clasificación. Las vistas se encargan de mostrar los datos al usuario y enviar cualquier interacción o entrada del usuario al controlador.
+- Vista (View): La vista es la capa de presentación de la aplicación. Es responsable de mostrar la información al usuario y recibir las interacciones del usuario. En el ejercicio, las vistas serían las páginas HTML generadas con la plantilla Handlebars, como la página de registro, la página de inicio de sesión, la página del quiz y la página de la clasificación. Las vistas se encargan de mostrar los datos al usuario y enviar cualquier interacción o entrada del usuario al controlador.
 
 - Controlador (Controller): El controlador actúa como intermediario entre el modelo y la vista. Recibe las interacciones del usuario desde la vista, realiza las operaciones necesarias en el modelo y actualiza la vista en consecuencia. En el ejercicio, los controladores serían las funciones que manejan las rutas y las solicitudes HTTP. Por ejemplo, el controlador se encargaría de registrar un nuevo usuario, autenticar al usuario durante el inicio de sesión, guardar las puntuaciones del usuario y proporcionar los datos necesarios a las vistas para mostrar la clasificación.
 
@@ -20,11 +20,11 @@ En tu implementación, puedes crear una estructura de directorios donde tengas c
 >   - userModel.js
 >- router(views)/
 >   - index.js
->   - User.js
+>   - userRoutes.js
 >- public/
->   - index-html
->  - css/
->    - styles.css
+>   - index.html
+>   - css/
+>       - styles.css
 
 ##### Ejemplo:
 
@@ -36,7 +36,7 @@ const app = express();
 const routes = require('./routes/index.js');
 
 // Se utilizan las rutas en la raiz
-app.get('/', routes);
+app.use('/', routes);
 
 const port = 3000;
 
@@ -65,18 +65,17 @@ const router = express.Router();
 const userController = require('../userController');
 
 //Ruta para crear un usuario
-router.post('/create', async (req, res) => {
+router.post('/register', async (req, res) => {
 
     // validación de data que se necesita para registrar un usuario
     // las respuestas al cliente pueden ser mas elaboradas
     const user = req.body;
-    await controllers.user.createUser(user).then(res_ =>{
+    await userController.registerUser(user).then(res_ =>{
         if (res_) {
             response.data = res_;  
             res.status(200).send(true);
         } 
         else {
-            response.err = 'Error trying to create the user';  
             res.status(500).send(false);
         } 
     });
@@ -100,7 +99,7 @@ const registerUser = async (user_data) =>{
 const loginUser = async (credentials) =>{
     const user = new User();
     await user.login(credentials).then(res=>{
-        if(res.err == null) return res.data;
+        if(res.err == null) return true;
         else return false;
     });
 }
@@ -119,7 +118,7 @@ const User = class {
     constructor(){
         //atributos de usuario
     }
-    //create an user
+    //registrar un usuario
     async register(user_data) {
         let result = false;
         try{
@@ -136,7 +135,7 @@ const User = class {
         let result = false;
         try{
             //logica de encriptación de contraseña con bcrypt
-             //logica de registro de un usuario  
+            //logica de registro de un usuario  
             result = true;
         } catch (error) {
             console.log(error);

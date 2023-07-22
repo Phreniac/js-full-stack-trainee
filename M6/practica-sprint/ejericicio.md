@@ -6,8 +6,8 @@ El objetivo del ejercicio es construir una aplicación web que permita a los usu
 
 ##### Requerimientos:
 
-- La aplicación debe permitir a los usuarios registrarse proporcionando su nombre, contraseña, rut y email.
-- Después de registrarse, los usuarios deben poder acceder a una página de inicio de sesión que solicite su email y contraseña o si ya esta registrado iniciar sesión.
+- La aplicación debe permitir a los usuarios registrarse proporcionando su nombre, contraseña, rut(opcional) y email o si ya esta registrado iniciar sesión.
+- Después de registrarse, los usuarios deben poder acceder a una página de inicio de sesión que solicite su email y contraseña
 - Una vez que los usuarios hayan iniciado sesión, deberán poder seleccionar un tema de entre tres opciones(a elección) y una dificultad (facil, intermedio y dificil).
 - Dependiendo del tema y la dificultad seleccionada, los usuarios deberán responder un quiz que consta de 10 preguntas, estas deben ser ordenadas aleatoreamente por cada vez que se participa.
 - Cada pregunta debe registrar el tiempo que el usuario tarda en responder.
