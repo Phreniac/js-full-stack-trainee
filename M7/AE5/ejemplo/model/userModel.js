@@ -14,7 +14,7 @@ class User {
         this.id_credential = id_credential
     }
 
-    getAllUsers = async () =>{
+    async getAllUsers () {
         try {
             await userModel.sync();
             return await userModel.findAll({where:{id_state: 1}});
@@ -23,7 +23,7 @@ class User {
         }
     }
 
-    createUser = async () =>{
+    async createUser(){
         try {
             await userModel.sync();
             const user_created =  await userModel.create(this);
@@ -34,7 +34,7 @@ class User {
         }
     };
 
-    updateUser = async () =>{
+    async updateUser(){
         try {
             await userModel.sync();
             
@@ -59,7 +59,7 @@ class User {
     //         console.log('deleteuser error: ', error);
     //     }
     // };
-    deleteUser = async () =>{
+    async deleteUser(){
         try {
             await userModel.sync();
             console.log('id',this);
@@ -101,6 +101,10 @@ const userModel = db.define('User', {
     id_credential: {
         type:Sequelize.INTEGER,
         allowNull: true,
+        references:{
+            model:'credentials',
+            key:'id'
+        }
     },
     id_state:{
         type:Sequelize.INTEGER,
@@ -109,14 +113,12 @@ const userModel = db.define('User', {
     }
 });
 
-userModel.hasOne(credentialModel,{
-    foreignKey: 'id',
-    as:'credential'
+credentialModel.hasOne(userModel,{
+    foreignKey: 'id'
 });
 
-credentialModel.belongsTo(userModel,{
-    foreignKey: 'id',
-    as: 'user'
+userModel.belongsTo(credentialModel,{
+    foreignKey: 'idCredential'
 });
 
 export {User};

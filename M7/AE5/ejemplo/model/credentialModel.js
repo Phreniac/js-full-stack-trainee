@@ -7,7 +7,7 @@ class Credential {
         this.password = password
     }
     
-    createCredential = async () =>{ 
+    async createCredential(){ 
         try {
             await credentialModel.sync();
             const created_credential = await credentialModel.create(this);
@@ -17,7 +17,6 @@ class Credential {
             }else{
                 return false;
             }
-            console.log('crear credencial: ', created_credential);
         } catch (error) {
             console.log('insert user error: ',error);
         }
@@ -32,6 +31,10 @@ const credentialModel = db.define('Credential', {
         autoIncrement:true,
     },
     password:{
+        type:Sequelize.STRING,
+        allowNull: false,
+    },
+    user:{
         type:Sequelize.STRING,
         allowNull: false,
     }

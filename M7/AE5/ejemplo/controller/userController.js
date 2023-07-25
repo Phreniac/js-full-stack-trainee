@@ -13,10 +13,10 @@ export const createUser = async (req, res) =>{
     const email = req.body.email;
 
     if(name && idnumber && lastname && email){
-        const credential = new Credential(email,'1234');
+        const credential = new Credential(email,'1234pass');
         const id_credential = await credential.createCredential();
         console.log('credencial usuario: ', id_credential);
-        const user = new User(name, lastname, idnumber, email, id_credential);
+        const user = new User(name, lastname, idnumber, email, null, id_credential);
         const model_result = await user.createUser();
         if(model_result != null) response.data = model_result;
         else response.error = 'Error trying to create the user'
