@@ -1,19 +1,23 @@
 import Sequelize from "sequelize";
 import db from '../utils/db_sequelize.js'
 import bcrypt from 'bcrypt';
+import {credentialModel} from './credentialModel.js';
+
 class User {
 
-    constructor(name, lastname, idnumber, email){
+    constructor(name, lastname, idnumber, email, id, id_credential){
+        this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.idnumber = idnumber;
-        this.email = email
+        this.email = email;
+        this.id_credential = id_credential
     }
 
     getAllUsers = async () =>{
         try {
             await userModel.sync();
-            return await userModel.findAll();
+            return await userModel.findAll({where:{id_state: 1}});
         } catch (error) {
             console.log('getalluser error: ', error)
         }
@@ -22,11 +26,51 @@ class User {
     createUser = async () =>{
         try {
             await userModel.sync();
-           const user_created =  await userModel.create(this);
-           if(user_created) return user_created.dataValues
-           else return false
+            const user_created =  await userModel.create(this);
+            if(user_created) return user_created.dataValues;
+            else return false;
         } catch (error) {
             console.log('create user error: ', error);
+        }
+    };
+
+    updateUser = async () =>{
+        try {
+            await userModel.sync();
+            
+           const user_updated =  await userModel.update(this,{where:{id:this.id}});
+           if(user_updated.length > 0) return true;
+           else return false;
+
+        } catch (error) {
+            console.log('updateuser error: ', error);
+        }
+    };
+    //se borra el registro de la base de datos
+    // deleteUser = async () =>{
+    //     try {
+    //         await userModel.sync();
+    //         console.log('id',this);
+    //         const user_deleted = await userModel.destroy({where:{id:this.id}});
+    //         if(user_deleted > 0) return true;
+    //         else return false;
+            
+    //     } catch (error) {
+    //         console.log('deleteuser error: ', error);
+    //     }
+    // };
+    deleteUser = async () =>{
+        try {
+            await userModel.sync();
+            console.log('id',this);
+            const user_deleted = await userModel.update({
+                id_state: 2
+            },{where:{id:this.id}});
+            if(user_deleted > 0) return true;
+            else return false;
+            
+        } catch (error) {
+            console.log('deleteuser error: ', error);
         }
     };
 }
@@ -63,6 +107,16 @@ const userModel = db.define('User', {
         allowNull: false,
         defaultValue: 1
     }
+});
+
+userModel.hasOne(credentialModel,{
+    foreignKey: 'id',
+    as:'credential'
+});
+
+credentialModel.belongsTo(userModel,{
+    foreignKey: 'id',
+    as: 'user'
 });
 
 export {User};

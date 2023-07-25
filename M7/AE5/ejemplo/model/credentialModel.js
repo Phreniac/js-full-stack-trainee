@@ -1,42 +1,40 @@
-import {createPool} from '../utils/db.js';
-
+import Sequelize from "sequelize";
+import db from '../utils/db_sequelize.js'
 class Credential {
 
-    constructor(){
+    constructor(user, password){
+        this.user = user;
+        this.password = password
     }
     
-    get user(){
-        return this._user;
-    }
-    set user(user){
-        this._user = user;
-    }
-    get password(){
-        return this._password;
-    }
-    set password(password){
-        this._password = password;
-    }
-
-    createCredential = async (credential) =>{ 
-        let result = null;
-        console.log('credential', credential);
+    createCredential = async () =>{ 
         try {
-            const pool = await createPool();
-            const connection = await pool.getConnection();
-            const query = `INSERT INTO credential(user, password) VALUES(?,?);`;
-            const [rows] = await connection.execute(query, [credential.user,credential.password]);
-            console.log('rows  insert user: ', rows);
-            if(rows.insertId > 0){
-                result = rows.insertId;
+            await credentialModel.sync();
+            const created_credential = await credentialModel.create(this);
+            if(created_credential){
+                console.log('credencial creada: ', created_credential);
+                return created_credential.dataValues.id;
+            }else{
+                return false;
             }
+            console.log('crear credencial: ', created_credential);
         } catch (error) {
             console.log('insert user error: ',error);
         }
-        return new Promise((resolve, reject) =>{
-            resolve(result);
-        });
     }
 }
 
-export {Credential};
+const credentialModel = db.define('Credential', {
+    id:{
+        type: Sequelize.INTEGER,
+        allowNull: false,
+        primaryKey: true,
+        autoIncrement:true,
+    },
+    password:{
+        type:Sequelize.STRING,
+        allowNull: false,
+    }
+});
+
+export {Credential, credentialModel};

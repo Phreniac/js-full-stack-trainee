@@ -1,4 +1,5 @@
 import {User} from '../model/userModel.js';
+import {Credential} from '../model/credentialModel.js';
 //funcion controlador para crear un usuario
 export const createUser = async (req, res) =>{
     let response = {
@@ -12,7 +13,10 @@ export const createUser = async (req, res) =>{
     const email = req.body.email;
 
     if(name && idnumber && lastname && email){
-        const user = new User(name, lastname, idnumber, email);
+        const credential = new Credential(email,'1234');
+        const id_credential = await credential.createCredential();
+        console.log('credencial usuario: ', id_credential);
+        const user = new User(name, lastname, idnumber, email, id_credential);
         const model_result = await user.createUser();
         if(model_result != null) response.data = model_result;
         else response.error = 'Error trying to create the user'
@@ -60,14 +64,10 @@ export const updateUser = async (req, res) =>{
     const idnumber = req.body.idnumber;
     const email = req.body.email;
 
-    if(id_user && name && idnumber && lastname && email){
-        const user = new User();
-        user.name = name;
-        user.lastname = lastname;
-        user.email = email;
-        user.idnumber =idnumber;
-        user.id = id_user;
-        const model_result = await user.updateUser(user);
+    if(id_user && name && idnumber && lastname && email && id_user){
+        console.log('parametros ok');
+        const user = new User(name,lastname,idnumber,email,id_user);
+        const model_result = await user.updateUser();
         if(model_result != null) response.data = model_result;
         else response.error = 'Error trying to update the user'
     }else{
@@ -85,8 +85,7 @@ export const deleteUser = async (req, res) =>{
     const id_user = req.params.id_user;
 
     if(id_user){
-        const user = new User();
-        user.id = id_user;
+        const user = new User(null,null,null,null, id_user, null);
         const model_result = await user.deleteUser(user);
         if(model_result != null) response.data = model_result;
         else response.error = 'Error trying to delete the user'
