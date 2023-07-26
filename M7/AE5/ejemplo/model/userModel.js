@@ -1,6 +1,5 @@
 import Sequelize from "sequelize";
 import db from '../utils/db_sequelize.js'
-import bcrypt from 'bcrypt';
 import {credentialModel} from './credentialModel.js';
 
 class User {
@@ -22,7 +21,6 @@ class User {
             console.log('getalluser error: ', error)
         }
     }
-
     async createUser(){
         try {
             await userModel.sync();
@@ -33,7 +31,6 @@ class User {
             console.log('create user error: ', error);
         }
     };
-
     async updateUser(){
         try {
             await userModel.sync();
@@ -121,4 +118,4 @@ userModel.belongsTo(credentialModel,{
     foreignKey: 'idCredential'
 });
 
-export {User};
+export {User, userModel};
