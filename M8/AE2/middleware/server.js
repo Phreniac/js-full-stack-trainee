@@ -6,8 +6,6 @@ app.use(express.json());
 
 
 // Middleware
-
-
 app.use((req, res, next) => {
     console.log('req.body: ', req.body);
     console.log(`Ruta accedida: ${req.path} - Fecha: ${new Date().toISOString()}`);
