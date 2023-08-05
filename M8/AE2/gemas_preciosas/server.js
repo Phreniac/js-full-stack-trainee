@@ -17,7 +17,6 @@ app.post(_routes.create, async (req, res, next) => {
     const _host = 'http://'+req.headers.host;
     try {
         const {name, weight, price, material} = req.body;
-
         if(name && weight && price && material){
             const id_jewell = jewell_list.length + 1;
             const jewell = {
