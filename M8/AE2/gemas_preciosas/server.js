@@ -88,12 +88,12 @@ app.get(_routes.getall, async (req, res, next) => {
 
 //ruta para subida de imagen de una joya
 app.put(_routes.upload_image, async (req, res, next) => {
-    const _host = 'http://'+req.headers.host;
+
     let jewell_exist = false;
     const max_weight = 1024 * 1024 * 5;
     console.log(req.files);
     let image_bw = null;
-    let image_color = null;
+
     try {
         const {id_jewell} = req.params;
         const uploaded_image = req.files.image;
