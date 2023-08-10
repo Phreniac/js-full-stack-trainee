@@ -32,7 +32,7 @@ app.post('/upload', (req, res) => {
   uploaded_file.mv(__dirname + upload_dir + file_name, (err)=>{
     if(err){
       console.log('error al subir: ',err);
-      res.send('La imagen no se subio correctamente');
+      res.send('La archivo no se subio correctamente');
     }
     //se genera una ruta que haria referencia al archivo en el repositorio
     const file_path = `http://${req.headers.host}/uploads/${file_name}`;

@@ -1,14 +1,26 @@
 import express from 'express';
+import fileUpload from 'express-fileupload';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import Jimp from 'jimp';
+
 const app = express();
 
+//crean constantes con los directorios locales
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 app.use(express.json());
+app.use(fileUpload());
+app.use(express.static('public'));
 
 const _routes = {
     self:'/jewell/:id_jewell',
     create:'/jewell/create',
     getall:'/jewell-getall/',
     delete:'/jewell/delete',
-    update:'/jewell/update'
+    update:'/jewell/update',
+    upload_image:'/jewell/upload-image/:id_jewell'
 }
 
 const jewell_list = [];
@@ -73,6 +85,73 @@ app.get(_routes.getall, async (req, res, next) => {
         next(new Error('Internal server error.')); 
     }
 });
+
+//ruta para subida de imagen de una joya
+app.put(_routes.upload_image, async (req, res, next) => {
+    const _host = 'http://'+req.headers.host;
+    let jewell_exist = false;
+    const max_weight = 1024 * 1024 * 5;
+    console.log(req.files);
+    let image_bw = null;
+    let image_color = null;
+    try {
+        const {id_jewell} = req.params;
+        const uploaded_image = req.files.image;
+
+        if(id_jewell && uploaded_image){
+            if(uploaded_image.size > max_weight){
+                res.status(400).send('La imagen supera el peso maximo.')
+                return;
+            }
+            //extension del archivo para crear nombre
+            const file_ext = path.extname(uploaded_image.name);
+            jewell_exist = findJewellById(id_jewell);
+            if(jewell_exist){
+
+                await Jimp.read(uploaded_image.data)
+                .then((img) => {
+                //se obtiene la imagen con Jimp y se añaden las modificaciones
+                image_bw = img
+                    .resize(400, Jimp.AUTO) // resize
+                    .quality(60) // set JPEG quality
+                }).catch((err) => {
+                    console.error(err);
+                });
+                const file_name_bw = path.parse(uploaded_image.name).name +'_black_white_'+ Date.now() + file_ext;
+                const file_name_color = path.parse(uploaded_image.name).name +'_color_'+ Date.now() + file_ext;
+                await image_bw.writeAsync(__dirname + '/public/uploads/' + file_name_color )
+            
+                image_bw.grayscale();
+                await image_bw.writeAsync(__dirname + '/public/uploads/' + file_name_bw )
+
+                const file_path_color = `http://${req.headers.host}/uploads/${file_name_color}`;
+                const file_path_bw = `http://${req.headers.host}/uploads/${file_name_bw}`;
+
+                jewell_exist.image = {
+                    color:file_path_color,
+                    blackandwhite: file_path_bw
+                }
+                res.status(200).send(jewell_exist);
+            }else{
+                res.status(400).send('La joya no existe');
+            }
+            
+    }else{
+        next(new Error('Missing required parameters.'));
+    }
+    } catch (error) {
+        console.log(error);
+        next(new Error('Internal server error.')); 
+    }
+    
+});
+
+
+function findJewellById(id_jewell){
+    let finded_jewell = jewell_list.find( jewell => jewell.id == id_jewell);
+    console.log('finded',finded_jewell)
+    return finded_jewell;
+}
 
 //rutas por hacer
 
