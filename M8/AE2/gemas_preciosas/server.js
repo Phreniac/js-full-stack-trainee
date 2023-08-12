@@ -3,6 +3,9 @@ import fileUpload from 'express-fileupload';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import Jimp from 'jimp';
+import {JWTMiddelware, validateJWT, generateJWT} from './middleware/jwt.js';
+import {responseObject} from './utils/responseObject.js';
+import cors from 'cors';
 
 const app = express();
 
@@ -10,22 +13,33 @@ const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+app.use(cors());
 app.use(express.json());
 app.use(fileUpload());
 app.use(express.static('public'));
 
 const _routes = {
-    self:'/jewell/:id_jewell',
-    create:'/jewell/create',
-    getall:'/jewell-getall/',
-    delete:'/jewell/delete',
-    update:'/jewell/update',
-    upload_image:'/jewell/upload-image/:id_jewell'
+    jewell:{
+        self:'/jewell/:id_jewell',
+        create:'/jewell/create',
+        getall:'/jewell-getall/',
+        delete:'/jewell/delete',
+        update:'/jewell/update',
+        upload_image:'/jewell/upload-image/:id_jewell'
+    },
+    user:{
+        create: '/user/create',
+        login: '/user/login',
+        verify_token: '/user/verify-token'
+    }
+    
 }
 
 const jewell_list = [];
+const user_list = [];
+
 //ruta para crear
-app.post(_routes.create, async (req, res, next) => {
+app.post(_routes.jewell.create, async (req, res, next) => {
     const _host = 'http://'+req.headers.host;
     try {
         const {name, weight, price, material} = req.body;
@@ -55,7 +69,7 @@ app.post(_routes.create, async (req, res, next) => {
     
 });
 // ruta para busqueda por id
-app.get(_routes.self, async (req, res, next) => {
+app.get(_routes.jewell.self, async (req, res, next) => {
     try {
         const {id_jewell} = req.params;
         let finded_jewell = jewell_list.find(jewell => jewell.id == id_jewell);
@@ -70,7 +84,7 @@ app.get(_routes.self, async (req, res, next) => {
 });
 
 //filtros para busqueda
-app.get(_routes.getall, async (req, res, next) => {
+app.get(_routes.jewell.getall, async (req, res, next) => {
     try {
         const {name, material} = req.query;
         let filtered_jewell_list = jewell_list;
@@ -87,7 +101,7 @@ app.get(_routes.getall, async (req, res, next) => {
 });
 
 //ruta para subida de imagen de una joya
-app.put(_routes.upload_image, async (req, res, next) => {
+app.put(_routes.jewell.upload_image, async (req, res, next) => {
 
     let jewell_exist = false;
     const max_weight = 1024 * 1024 * 5;
@@ -146,6 +160,73 @@ app.put(_routes.upload_image, async (req, res, next) => {
     
 });
 
+app.post(_routes.user.create, (req, res) => {
+    const {name, lastname, email} = req.body;
+    if(name && lastname && email){
+        const user = {
+            id: user_list.length + 1,
+            name: name,
+            lastname: lastname,
+            email: email,
+        }
+        res.send(user);
+        user.password = '2023!';
+        user_list.push(user);
+    }
+});
+
+app.post(_routes.user.login, (req, res) => {
+    const response = responseObject();
+    response.msg = 'Inicio de sesión';
+
+    const {email, password} = req.body;
+    if(email && password){
+        const user_exist = getUserByEmail(email);
+        console.log('user_exist', user_exist);
+        if(user_exist){
+            if(user_exist.password == password){
+                console.log('contraseñas coinciden');
+                user_exist.password = '';
+                response.data = generateJWT(user_exist);
+                res.send(response);
+            }else{
+                response.err = 'Credenciales invalidas.';
+                res.status(401).send(response)    
+            }
+            
+        }else{
+            response.err = 'Credenciales invalidas.';
+            res.status(401).send(response)
+        }
+    }else{
+        response.err = 'Faltan parametros requeridos';
+        res.status(400).send(response)
+    }
+});
+
+app.post(_routes.user.verify_token, (req, res) => {
+    const {access_token} = req.body;
+    const response = responseObject();
+    response.msg = 'Verificación de token de accesso';
+    if(access_token){
+        const token_isvalid = validateJWT(access_token);
+        if(token_isvalid){
+            response.data = true;
+            res.status(200).send(response)    
+        }else{
+            response.data = false;
+            response.err = 'Token invalido';
+            res.status(200).send(response)
+        }
+    }else{
+        res.status(400).send('Faltan parametros requeridos')
+    }
+});
+
+const getUserByEmail= (email_user)=>{
+    let user = user_list.find(user => user.email == email_user);
+    return user;
+}
 
 function findJewellById(id_jewell){
     let finded_jewell = jewell_list.find( jewell => jewell.id == id_jewell);

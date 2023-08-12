@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js" integrity="sha512-uMtXmF28A2Ab/JJO2t/vYhlaa/3ahUOgj1Zf27M5rOo8/+fcTUVH0/E0ll68njmjrLqOBjXM3V9NiPFL5ywWPQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <title>Gemas Preciosas</title>
+    <style>
+        html,body{
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        .container-input{
+            width: 300px;
+            height: 300px;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 3px 3px 8px rgba(0,0,0,0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .input-elem{
+            margin: 20px;
+            position: relative;
+        }
+        .input-elem label{
+            top: -30px;
+            position: absolute;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <section class="container-input">
+            <div class="input-elem">
+                <label > E-mail:</label>
+                <input id="user_name" type="text">
+            </div>
+            <div class="input-elem">
+                <label>Contraseña:</label>
+                <input id="user_password" type="password">
+            </div>
+            <div>
+                <button onclick="loginUser()">Iniciar sesión</button>
+            </div>
+        </section>
+    </main>
+    <script src="./assets/javascript/home.js"></script>
+    <script></script>
+</body>
+</html>

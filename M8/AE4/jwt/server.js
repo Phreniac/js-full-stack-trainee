@@ -15,15 +15,15 @@ const JWTMiddelware = (req, res, next)=>{
     if(verfied_token){
         next();
     }else{
-        res.status(401).send('Error de authorización, el token es invalido')
+        res.status(401).send('Error de autorización, el token es invalido')
     }
-    
 };
 
 const app = express();
 const port = 3000;
 
 const user_list = [];
+
 //middlewares
 app.use(express.json());
 
@@ -85,7 +85,6 @@ const validateJWT= (token)=>{
     })
     return result;
 }
-
 const getUserByEmail= (email_user)=>{
     let user = user_list.find(user => user.email == email_user);
     return user;
