@@ -3,7 +3,7 @@ import fileUpload from 'express-fileupload';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import Jimp from 'jimp';
-import {JWTMiddelware, validateJWT, generateJWT} from './middleware/jwt.js';
+import {JWTMiddelware,JWTMiddelwareUser, validateJWT, generateJWT} from './middleware/jwt.js';
 import {responseObject} from './utils/responseObject.js';
 import cors from 'cors';
 
@@ -30,9 +30,9 @@ const _routes = {
     user:{
         create: '/user/create',
         login: '/user/login',
+        update: '/user/update',
         verify_token: '/user/verify-token'
     }
-    
 }
 
 const jewell_list = [];
@@ -175,6 +175,32 @@ app.post(_routes.user.create, (req, res) => {
     }
 });
 
+app.put(_routes.user.update, JWTMiddelwareUser, async (req, res) => {
+    const response = responseObject();
+    response.msg = 'Actualizar usuario';
+    const {name, lastname, email, id_user} = req.body;
+    if(name && lastname && email && id_user){
+        const decoded_token = req.access_token;
+        if(decoded_token.id == id_user){
+            console.log('decoded_token', decoded_token);
+            const user_index = await getUserIndexById(id_user);
+            if(user_index > -1){
+                user_list[user_index].name = name;
+                user_list[user_index].lastname = lastname;
+                user_list[user_index].email = email;
+                response.data = user_list[user_index];
+            }else{
+                response.err = 'El usuario no se encontró.'; 
+            }
+        }else{
+            response.err = 'Sin autorización para el uso del servicio.';  
+        }
+    }else{
+        response.err = 'Faltan parametros requeridos.'; 
+    }
+    res.send(response);
+});
+
 app.post(_routes.user.login, (req, res) => {
     const response = responseObject();
     response.msg = 'Inicio de sesión';
@@ -225,6 +251,10 @@ app.post(_routes.user.verify_token, (req, res) => {
 
 const getUserByEmail= (email_user)=>{
     let user = user_list.find(user => user.email == email_user);
+    return user;
+}
+const getUserIndexById= async (id_user)=>{
+    let user = user_list.findIndex(user => user.id == id_user);
     return user;
 }
 
