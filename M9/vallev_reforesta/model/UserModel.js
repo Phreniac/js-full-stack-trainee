@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 class Usuario {
     _contrasena = null
     _id = null
-    constructor(nombre, apellido, rut, correo, id_rol, fecha_actualizacion, fecha_creacion, ){
+    constructor(nombre, apellido, rut, correo, telefono, id_rol, fecha_actualizacion, fecha_creacion, ){
         this.nombre = nombre;
         this.apellido = apellido;
         this.rut = rut;
@@ -12,6 +12,7 @@ class Usuario {
         this.id_rol = id_rol;
         this.fecha_actualizacion = fecha_actualizacion;
         this.fecha_creacion = fecha_creacion;
+        this.telefono = telefono;
     }
     get contrasena(){
         return this._contrasena
@@ -40,9 +41,9 @@ class Usuario {
         const connection = await pool.getConnection();
         connection.beginTransaction();
         try {
-            const query = `INSERT INTO usuario(nombre, apellido, rut, correo, contrasena, fecha_creacion, fecha_actualizacion, id_rol) 
-                VALUES(?,?,?,?,?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?);`;
-            const [rows] = await connection.query(query, [this.nombre, this.apellido, this.rut, this.correo, hashed_password, this.id_rol]);
+            const query = `INSERT INTO usuario(nombre, apellido, rut, correo, telefono, contrasena, fecha_creacion, fecha_actualizacion, id_rol) 
+                VALUES(?,?,?,?,?,?, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, ?);`;
+            const [rows] = await connection.query(query, [this.nombre, this.apellido, this.rut, this.telefono, this.correo, hashed_password, this.id_rol]);
             console.log('rows  insert usuario: ', rows);
             if(rows.insertId > 0){
                 const [rows2] = await connection.query(`SELECT id_usuario, nombre, apellido, rut, correo, id_rol,fecha_creacion, fecha_actualizacion FROM usuario WHERE id_usuario = ?`, [rows.insertId]);

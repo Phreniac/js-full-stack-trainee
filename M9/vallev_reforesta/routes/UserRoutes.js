@@ -7,4 +7,5 @@ const router = express.Router();
 router.post('/crear',crearUsuario);
 router.put('/actualizar/:id_usuario',actualizarUsuario);
 router.post('/login',loginUsuario);
+
 export default router;

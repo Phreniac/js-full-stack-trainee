@@ -6,9 +6,9 @@ export const crearUsuario = async (req, res) =>{
         data: null
     };
     try {
-        const {nombre, apellido, rut, correo, id_rol, contrasena} = req.body;
+        const {nombre, apellido, rut, correo, id_rol, contrasena, telefono} = req.body;
         if(nombre && apellido && rut && correo && id_rol && contrasena){
-            const usuario = new Usuario(nombre, apellido, rut, correo, id_rol);
+            const usuario = new Usuario(nombre, apellido, rut, correo,telefono, id_rol);
             usuario.contrasena = contrasena;
             const resultado_modelo = await usuario.crear();
             console.log('resultado modelo usuario', resultado_modelo);
